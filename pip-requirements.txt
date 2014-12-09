@@ -1,2 +1,1 @@
 Flask==0.10
-python-instagram==0.8
