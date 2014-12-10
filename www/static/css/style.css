@@ -300,6 +300,11 @@ nav.astropy .pull-right{
 }
 
 /* Modify textarea for form */
+textarea {
+    box-sizing: border-box;
+    min-height: 32px;
+}
+
 .inputoutput {
     font-size: 18pt;
     margin-top: 25px;

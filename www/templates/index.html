@@ -10,7 +10,7 @@
     <link rel="stylesheet" type="text/css" href="static/css/style.css" />
 
     <script src="static/js/jquery.min.js"></script>
-    <script src="static/js/jquery.autosize.min.js"></script>
+    <script src="static/js/jquery.textarea_autosize.js"></script>
 
     <title>Astropy Coordinate Conversion</title>
 
@@ -42,7 +42,7 @@
             {% endfor %}
           </select>
 
-          <textarea class="coord-box form-control inputoutput" rows="1" data-min-rows="1" id="input-coordinates" name="input-coordinates" placeholder="13.451 8.675309"></textarea>
+          <textarea class="coord-box form-control inputoutput js-auto-size" rows="1" data-min-rows="1" id="input-coordinates" name="input-coordinates" placeholder="13.451 8.675309"></textarea>
           <div class="form-group center-text">
             <button type="submit" class="btn btn-primary" id='convert-submit'>Convert</button>
           </div>
@@ -71,7 +71,7 @@
 
   <script type='text/javascript'>
     $(document).ready(function(){
-      $('textarea').autosize();
+      $('textarea.js-auto-size').textareaAutoSize();
 
       $("#convert-form").on("submit", function (e) {
         e.preventDefault();
