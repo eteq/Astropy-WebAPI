@@ -81,7 +81,7 @@ def _parse_args(args):
             val = [comp.value]
         else:
             val = comp.value
-        output['coord' + ip1s] = val
+        output['coord' + ip1s] = list(val)
         output['coord' + ip1s + 'name'] = compnm
         output['coord' + ip1s + 'unit'] = str(comp.unit)
 
