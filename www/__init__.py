@@ -12,14 +12,11 @@ __author__ = "adrn <adrn@astro.columbia.edu>"
 
 # Standard library
 import os
-import sys
-import time
-import random
 
 # Third-party
 import astropy.units as u
 from astropy.utils import isiterable
-import astropy.coordinates import SkyCoord, frame_transform_graph
+from astropy.coordinates import SkyCoord, frame_transform_graph
 from flask import Flask, request, render_template, session, redirect, abort, flash, jsonify
 
 with open(".env") as f:
@@ -84,8 +81,7 @@ def convert():
     # get the 'to' frame class
     ToFrame = frame_transform_graph.lookup_name(to_system.lower())
 
-    c = coord.SkyCoord(*cargs, unit=(c1u, c2u), **fromargs)\
-             .transform_to(frame=ToFrame(**toargs))
+    c = SkyCoord(*cargs, unit=(c1u, c2u), **fromargs).transform_to(frame=ToFrame(**toargs))
 
     c1_out = c.data.lon.to(c1u).value
     c2_out = c.data.lat.to(c1u).value
