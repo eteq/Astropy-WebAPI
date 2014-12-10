@@ -13,101 +13,84 @@
     <script src="static/js/jquery.autosize.min.js"></script>
 
     <title>Astropy Coordinate Conversion</title>
+
 </head>
 
 <body>
+  <nav class="astropy">
+    <a href="http://www.astropy.org"><img src="http://www.astropy.org/astropy-tutorials/images/astropy_word_32.png"/></a>
+    <div id="navigation">
+      <ul>
+        <li style="margin-top: 7px"><a href="http://coordinates.astropy.org">Coordinate conversion</a></li>
+      </ul>
+    </div>
+  </nav>
 
-  <div id="wrapper">
-    <nav class="astropy">
-      <a href="http://www.astropy.org"><img src="http://www.astropy.org/astropy-tutorials/images/astropy_word_32.png"/></a>
-      <div id="navigation">
-        <ul>
-          <li style="margin-top: 7px"><a href="http://coordinates.astropy.org">Coordinate conversion</a></li>
-        </ul>
-      </div>
-    </nav>
+  <section>
 
-    <section>
+    <div class='col-md-1'></div>
 
-      <h2 class='center-text'>Convert your coordinates</h2>
+    <form id='convert-form' action="" method="post">
+      <div id='from' class='col-md-5 center-text'>
+
+        <h2 class='center-text'>From</h2>
 
         <div class="form">
-          <form action="/" method="post">
-            <textarea class="coord-box form-control" rows="1" data-min-rows="1" name="input-coordinates" id="input-coordinates" placeholder="127.412 -13.41259"></textarea>
-            <br/>
-            <div class="form-group center-text">
-              <button type="submit" class="btn btn-primary">Convert</button>
-            </div>
-
-          </form>
-        </div>
-
-        <br/>
-
-        {% if outputCoords != None %}
-        <div class="output center-text">
-            {% for row in outputCoords %}
-              {{row[0]}} {{row[1]}}
+          <select name='from'>
+            {% for name in frame_names %}
+              <option value="{{name}}">{{name}}</option>
             {% endfor %}
+          </select>
+
+          <textarea class="coord-box form-control inputoutput" rows="1" data-min-rows="1" id="input-coordinates" name="input-coordinates" placeholder="13.451 8.675309"></textarea>
+          <div class="form-group center-text">
+            <button type="submit" class="btn btn-primary" id='convert-submit'>Convert</button>
+          </div>
         </div>
-        {% endif %}
 
-
-      <!-- <div class="row">
-      <div class="col-lg-5">
-
-      <form role="form" action="http://astropy-api.herokuapp.com/coordinates" method="get">
-
-      <div class="form-group" id='input-coordinates-group'>
-        <label for="input-coordinates">Input coordinates:</label>
-        <textarea class="form-control" rows="3" name="input-coordinates" id="input-coordinates" placeholder=""></textarea>
-        <span id="helpBlock" class="help-block">Enter one coordinate per line.
-        Available formats are hh:mm:ss ±dd:mm:ss; ddd.ddd dd.ddd.</span>
       </div>
 
-      <div class="form-group">
-        <label for="input-system" class="control-label">Input system:</label>
-          <select class="form-control" name='input-system' id='input-system'>
-            <option value='icrs2000' selected='selected'>Equatorial (ICRS, J2000)</option>
-            <option value='icrs1950'>Equatorial (ICRS, B1950)</option>
-            <option value='gal'>Galactic</option>
-          </select>
+      <div id='to' class='col-md-5 center-text'>
+
+        <h2 class='center-text'>To</h2>
+
+        <select name='to'>
+          {% for name in frame_names %}
+            <option value="{{name}}">{{name}}</option>
+          {% endfor %}
+        </select>
+
+        <div class="inputoutput output" id="output"></div>
+
       </div>
-
-      <div class="form-group">
-        <label for="output-system" class="control-label">Output system:</label>
-          <select class="form-control" name='output-system' id='output-system'>
-            <option value='icrs2000' selected='selected'>Equatorial (ICRS, J2000)</option>
-            <option value='icrs1950'>Equatorial (ICRS, B1950)</option>
-            <option value='gal'>Galactic</option>
-          </select>
-      </div>
-
-      <div class="form-group">
-        <label for="output-format" class="control-label">Output format:</label>
-          <select class="form-control" name='output-format' id='output-format'>
-            <option value='deg' selected='selected'>ddd.ddd dd.ddd</option>
-            <option value='sex'>hh:mm:ss ±dd:mm:ss</option>
-          </select>
-      </div>
-
-      <div class="form-group">
-        <button type="submit" class="btn btn-primary">Convert</button>
-      </div>
-
-      </form>
-
-    </div>
-
     </form>
 
-  </div>
+    <div class='col-md-1'></div>
 
-</div> -->
+  </section>
 
   <script type='text/javascript'>
     $(document).ready(function(){
-        $('textarea').autosize();
+      $('textarea').autosize();
+
+      $("#convert-form").on("submit", function (e) {
+        e.preventDefault();
+        $("#output").html('');
+
+        data = {};
+        $.ajax({
+          type: "POST",
+          dataType: 'json',
+          url: "/api/convert",
+          data: $("#convert-form").serialize(),
+          success: function(d) {
+            for (var i=0; i < d['coord1'].length; i++) {
+              $("#output").append("<p>" + d['coord1'][i] + " " + d['coord2'][i] + "</p>");
+            }
+          }
+        });
+
+      });
     });
   </script>
 

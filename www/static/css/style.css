@@ -300,8 +300,29 @@ nav.astropy .pull-right{
 }
 
 /* Modify textarea for form */
-#input-coordinates {
+.inputoutput {
     font-size: 18pt;
-    text-align: center;
+    margin-top: 25px;
+    margin-bottom: 25px;
+    text-align: left;
+}
+
+#input-coordinates {
     border: 1px solid #666666;
+}
+
+.form {
+    padding: 0px;
+    margin: 0px;
+}
+
+/* Horizontal rules */
+hr {
+    border: 1px solid #cccccc;
+    height: 0px;
+}
+
+.inputoutput p {
+    margin: 0;
+    padding: 0;
 }

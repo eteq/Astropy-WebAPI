@@ -73,14 +73,20 @@ def _parse_args(args):
         c1_out = [c1_out]
         c2_out = [c2_out]
 
-    return dict(coord1=list(c1_out),
+    derp = dict(coord1=list(c1_out),
                 coord2=list(c2_out),
                 coord1unit=c1u.to_string(),
                 coord2unit=c2u.to_string())
 
+    for fattr_nm, fattr_val in c.get_frame_attr_names().items():
+        derp['frame_' + fattr_nm] = str(fattr_val)
+
+    return derp
+
 @app.route('/', methods=['GET','POST'])
 def index():
 
+    frame_names = frame_transform_graph.get_names()
     if request.method == 'POST':
         args = dict()
         lines = request.form['input-coordinates'].split('\r\n')
@@ -90,9 +96,9 @@ def index():
         args['from'] = 'galactic'
 
         derp = _parse_args(args)
-        return render_template('index.html', outputCoords=zip(derp['coord1'],derp['coord2']))
+        return render_template('index.html', outputCoords=zip(derp['coord1'],derp['coord2']), frame_names=frame_names)
 
-    return render_template('index.html', outputCoords=None)
+    return render_template('index.html', outputCoords=None, frame_names=frame_names)
 
 @app.route('/api/convert', methods=['GET', 'POST'])
 def convert():
@@ -109,16 +115,15 @@ def convert():
 
         else:
             args = dict()
-            lines = request.form['input-coordinates'].split('\r\n')
-            args['coord1'] = [line.split()[0] for line in lines]
-            args['coord2'] = [line.split()[1] for line in lines]
-            args['to'] = 'icrs'
-            args['from'] = 'galactic'
+            lines = request.form['input-coordinates'].split('\r\n');
+            args['coord1'] = [float(line.split()[0]) for line in lines];
+            args['coord2'] = [float(line.split()[1]) for line in lines];
+            args['from'] = request.form['from'];
+            args['to'] = request.form['to'];
+
+            print(args['coord1'])
 
     derp = _parse_args(args)
-    for fattr_nm, fattr_val in c.get_frame_attr_names().items():
-        derp['frame_' + fattr_nm] = str(fattr_val)
-
     return jsonify(derp)
 
 # @app.errorhandler(404)
