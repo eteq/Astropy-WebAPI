@@ -5,7 +5,7 @@
 */
 
 /* HTML5 display-role reset for older browsers */
-article, aside, details, figcaption, figure, 
+article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
     display: block;
 }
@@ -37,7 +37,7 @@ body{
 
 #wrapper{
     margin:0 auto;
-    max-width:960px; 
+    max-width:960px;
     padding:0 10px;
     min-width: 320px; /* min-width of whole site */
 }
@@ -73,7 +73,7 @@ h2{
 h3{
     font-size: 20px;
     margin: 20px 0px 10px 0px;
-    
+
 }
 
 p{
@@ -212,7 +212,7 @@ nav img{
 
 nav ul{
     max-width:960px;
-    margin: 0;  
+    margin: 0;
     padding: 0;
 }
 
@@ -278,23 +278,30 @@ nav.astropy .pull-right{
     margin-bottom: 0;
 }
 
-
-/*
-    Notebook styling
-*/
-
-#notebook p {
-    font-size: 16px;
-    line-height: 20px;
+/* Dumbass stuff to center placeholder text */
+::-webkit-input-placeholder {
+   text-align: center;
 }
 
-#notebook code, pre{
-    padding:0 3px 2px;
-    font-family: monospace;
-    word-wrap: break-word;
+:-moz-placeholder { /* Firefox 18- */
+   text-align: center;
 }
 
-#notebook pre {
-    font-size:14px;
-    line-height: 17px;
+::-moz-placeholder {  /* Firefox 19+ */
+   text-align: center;
+}
+
+:-ms-input-placeholder {
+   text-align: center;
+}
+
+.center-text {
+    text-align: center;
+}
+
+/* Modify textarea for form */
+#input-coordinates {
+    font-size: 18pt;
+    text-align: center;
+    border: 1px solid #666666;
 }

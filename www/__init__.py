@@ -27,24 +27,7 @@ with open(".env") as f:
 app = Flask(__name__)   # create our flask app
 app.secret_key = os.environ.get('SECRET_KEY')
 
-
-@app.route('/api/convert', methods=['GET', 'POST'])
-def convert():
-    if request.method == 'GET':
-        args = dict(request.args)
-        for k, v in args.items():
-            if len(v) == 1:
-                args[k] = v[0]
-
-    elif request.method == 'POST':
-        json = request.get_json()
-        if json is not None:
-            args = dict(json)
-
-        else:
-            request.form
-            raise NotImplementedError()
-
+def _parse_args(args):
     # first try pulling out separate coordinates
     c1 = args.pop('coord1', None)
     c2 = args.pop('coord2', None)
@@ -105,7 +88,46 @@ def convert():
     for fattr_nm, fattr_val in c.get_frame_attr_names().items():
         output['frame_' + fattr_nm] = str(fattr_val)
 
-    return jsonify(output)
+    return output
+
+@app.route('/', methods=['GET','POST'])
+def index():
+
+    if request.method == 'POST':
+        args = dict()
+        lines = request.form['input-coordinates'].split('\r\n')
+        args['coord1'] = [line.split()[0] for line in lines]
+        args['coord2'] = [line.split()[1] for line in lines]
+        args['to'] = 'icrs'
+        args['from'] = 'galactic'
+
+        derp = _parse_args(args)
+        return render_template('index.html', outputCoords=zip(derp['coord1'],derp['coord2']))
+
+    return render_template('index.html', outputCoords=None)
+
+@app.route('/api/convert', methods=['GET', 'POST'])
+def convert():
+    if request.method == 'GET':
+        args = dict(request.args)
+        for k, v in args.items():
+            if len(v) == 1:
+                args[k] = v[0]
+
+    elif request.method == 'POST':
+        json = request.get_json()
+        if json is not None:
+            args = dict(json)
+
+        else:
+            args = dict()
+            lines = request.form['input-coordinates'].split('\r\n')
+            args['coord1'] = [line.split()[0] for line in lines]
+            args['coord2'] = [line.split()[1] for line in lines]
+            args['to'] = 'icrs'
+            args['from'] = 'galactic'
+
+    return jsonify(_parse_args(args))
 
 # @app.errorhandler(404)
 # def page_not_found(error):
