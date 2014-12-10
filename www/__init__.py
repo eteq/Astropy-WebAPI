@@ -16,6 +16,7 @@ import time
 import random
 
 # Third-party
+from astropy.utils import isiterable
 import astropy.coordinates as coord
 import astropy.units as u
 from astropy.coordinates.sky_coordinate import _get_frame, _get_frame_class
@@ -117,6 +118,10 @@ def convert():
 
     c1_out = c.data.lon.to(c1u).value
     c2_out = c.data.lat.to(c1u).value
+
+    if not isiterable(c1_out):
+        c1_out = [c1_out]
+        c2_out = [c2_out]
 
     derp = dict(coord1=list(c1_out),
                 coord2=list(c2_out),
