@@ -30,35 +30,20 @@ with open(".env") as f:
 app = Flask(__name__)   # create our flask app
 app.secret_key = os.environ.get('SECRET_KEY')
 
-# @app.route('/')
-# @app.route('/<tag>')
-# def index(tag=None):
+@app.route('/', methods=['GET','POST'])
+def index():
 
-#     if 'instagram_access_token' in session and 'instagram_user' in session:
-#         # if no tag specified, get a recent popular image, grab the tag from that
-#         if tag is None:
-#             while True:
-#                 media = api.media_popular(1, None)
+    if request.method == 'POST':
+        args = dict()
+        lines = request.form['input-coordinates'].split('\r\n')
+        args['coord1'] = [line.split()[0] for line in lines]
+        args['coord2'] = [line.split()[1] for line in lines]
+        args['to'] = 'icrs'
+        args['from'] = 'galactic'
 
-#                 if hasattr(media[0], 'tags') and len(media[0].tags) > 0:
-#                     break
-#                 time.sleep(0.1)
+        return render_template('index.html', outputCoords=[(15,18)])
 
-#             tag = random.choice(media[0].tags).name
-
-#         media, next = api.tag_recent_media(2, None, tag)
-#         print(next)
-
-#         templateData = {
-#             'size' : request.args.get('size','thumb'),
-#             'media' : media,
-#             'header' : tag.lower()
-#         }
-
-#         return render_template('display.html', **templateData)
-
-#     else:
-#         return redirect('/connect')
+    return render_template('index.html', outputCoords=None)
 
 @app.route('/api/convert', methods=['GET', 'POST'])
 def convert():
@@ -74,8 +59,12 @@ def convert():
             args = dict(json)
 
         else:
-            request.form
-            raise NotImplementedError()
+            args = dict()
+            lines = request.form['input-coordinates'].split('\r\n')
+            args['coord1'] = [line.split()[0] for line in lines]
+            args['coord2'] = [line.split()[1] for line in lines]
+            args['to'] = 'icrs'
+            args['from'] = 'galactic'
 
     # first try pulling out separate coordinates
     c1 = args.pop('coord1', None)
