@@ -85,8 +85,8 @@ def _parse_args(args):
         output['coord' + ip1s + 'name'] = compnm
         output['coord' + ip1s + 'unit'] = str(comp.unit)
 
-    for fattr_nm, fattr_val in c.get_frame_attr_names().items():
-        output['frame_' + fattr_nm] = str(fattr_val)
+    for fattr_nm in c.get_frame_attr_names():
+        output['frame_' + fattr_nm] = str(getattr(c, fattr_nm))
 
     return output
 
