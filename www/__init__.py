@@ -43,8 +43,8 @@ def _parse_args(args):
         raise ValueError("Shitty arguments, yo.")
 
     # default units are degrees
-    c1u = u.Unit(args.pop('coord1unit', 'degree'))
-    c2u = u.Unit(args.pop('coord2unit', 'degree'))
+    c1u = u.Unit(args.pop('coord1unit', u.deg))
+    c2u = u.Unit(args.pop('coord2unit', u.deg))
 
     to_system = args.pop('to')
     from_system = args.pop('from')
@@ -66,22 +66,29 @@ def _parse_args(args):
 
     c = SkyCoord(*cargs, unit=(c1u, c2u), **fromargs).transform_to(frame=ToFrame(**toargs))
 
-    c1_out = c.data.lon.to(c1u).value
-    c2_out = c.data.lat.to(c1u).value
+    comps = []
+    for compnm in c.representation_component_names:
+        compval = getattr(c, compnm)
+        uout = c.representation_component_units.get(compnm, None)
+        if uout is not None:
+            compval.to(uout)
+        comps.append((compnm, compval))
 
-    if not isiterable(c1_out):
-        c1_out = [c1_out]
-        c2_out = [c2_out]
+    output = {}
+    for i, (compnm, comp) in enumerate(comps):
+        ip1s = str(i + 1)
+        if not isiterable(comp.value):
+            val = [comp.value]
+        else:
+            val = comp.value
+        output['coord' + ip1s] = val
+        output['coord' + ip1s + 'name'] = compnm
+        output['coord' + ip1s + 'unit'] = str(comp.unit)
 
-    derp = dict(coord1=list(c1_out),
-                coord2=list(c2_out),
-                coord1unit=c1u.to_string(),
-                coord2unit=c2u.to_string())
+    for fattr_nm in c.get_frame_attr_names():
+        output['frame_' + fattr_nm] = str(getattr(c, fattr_nm))
 
-    for fattr_nm, fattr_val in c.get_frame_attr_names().items():
-        derp['frame_' + fattr_nm] = str(fattr_val)
-
-    return derp
+    return output
 
 @app.route('/', methods=['GET','POST'])
 def index():
@@ -121,10 +128,7 @@ def convert():
             args['from'] = request.form['from'];
             args['to'] = request.form['to'];
 
-            print(args['coord1'])
-
-    derp = _parse_args(args)
-    return jsonify(derp)
+    return jsonify(_parse_args(args))
 
 # @app.errorhandler(404)
 # def page_not_found(error):
