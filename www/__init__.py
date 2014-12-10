@@ -92,20 +92,8 @@ def _parse_args(args):
 
 @app.route('/', methods=['GET','POST'])
 def index():
-
     frame_names = frame_transform_graph.get_names()
-    if request.method == 'POST':
-        args = dict()
-        lines = request.form['input-coordinates'].split('\r\n')
-        args['coord1'] = [line.split()[0] for line in lines]
-        args['coord2'] = [line.split()[1] for line in lines]
-        args['to'] = 'icrs'
-        args['from'] = 'galactic'
-
-        derp = _parse_args(args)
-        return render_template('index.html', outputCoords=zip(derp['coord1'],derp['coord2']), frame_names=frame_names)
-
-    return render_template('index.html', outputCoords=None, frame_names=frame_names)
+    return render_template('index.html', frame_names=frame_names)
 
 @app.route('/api/convert', methods=['GET', 'POST'])
 def convert():
