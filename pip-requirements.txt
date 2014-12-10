@@ -1,1 +1,4 @@
 Flask==0.10
+numpy>=1.6
+Astropy>=0.4.2
+
