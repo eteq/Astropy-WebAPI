@@ -76,14 +76,19 @@ def _parse_args(args):
 
     output = {}
     for i, (compnm, comp) in enumerate(comps):
+        # container for information for this coordinate
+        this_coord = dict()
+
         ip1s = str(i + 1)
         if not isiterable(comp.value):
             val = [comp.value]
         else:
             val = comp.value
-        output['coord' + ip1s] = list(val)
-        output['coord' + ip1s + 'name'] = compnm
-        output['coord' + ip1s + 'unit'] = str(comp.unit)
+
+        this_coord['data'] = list(val)
+        this_coord['name'] = compnm
+        this_coord['unit'] = str(comp.unit)
+        output['coord' + ip1s] = this_coord
 
     for fattr_nm in c.get_frame_attr_names():
         output['frame_' + fattr_nm] = str(getattr(c, fattr_nm))

@@ -32,7 +32,8 @@ body{
     line-height: 1.25em;
     font-size: 16px;
     color:#333;
-    font-family: 'Open Sans', sans-serif;
+    /* font-family: 'Open Sans', sans-serif;*/
+    font-family: 'Comic Sans MS';
 }
 
 #wrapper{
@@ -278,22 +279,7 @@ nav.astropy .pull-right{
     margin-bottom: 0;
 }
 
-/* Dumbass stuff to center placeholder text */
-::-webkit-input-placeholder {
-   text-align: center;
-}
-
-:-moz-placeholder { /* Firefox 18- */
-   text-align: center;
-}
-
-::-moz-placeholder {  /* Firefox 19+ */
-   text-align: center;
-}
-
-:-ms-input-placeholder {
-   text-align: center;
-}
+/* ----------------- */
 
 .center-text {
     text-align: center;
@@ -330,4 +316,8 @@ hr {
 .inputoutput p {
     margin: 0;
     padding: 0;
+}
+
+.arrow {
+    font-size: 250%;
 }
