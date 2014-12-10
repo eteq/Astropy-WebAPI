@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="description" content="Astropy. A Community Python Library for Astronomy." />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:200,300,400italic,400,700' rel='stylesheet' type='text/css' />
+
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="assets/css/style.css" />
+    
+    <title>Astropy Coordinate Conversion</title>
+</head>
+
+<body>
+
+  <div id="wrapper">
+    <nav class="astropy">
+      <a href="http://www.astropy.org"><img src="http://www.astropy.org/astropy-tutorials/images/astropy_word_32.png"/></a>
+      <div id="navigation">
+        <ul>
+          <li style="margin-top: 7px"><a href="http://coordinates.astropy.org">Coordinate conversion</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <section>
+      <h2>Coordinate conversion tool</h2>
+
+      <div class="row">
+      <div class="col-sm-5">
+
+      <form role="form" action="http://astropy-api.herokuapp.com/coordinates" method="get">
+
+      <div class="form-group" id='input-coordinates-group'>
+        <label for="input-coordinates">Input coordinates:</label>
+        <textarea class="form-control" rows="3" name="input-coordinates" id="input-coordinates" placeholder=""></textarea>
+        <span id="helpBlock" class="help-block">Enter one coordinate per line.
+        Available formats are hh:mm:ss ±dd:mm:ss; ddd.ddd dd.ddd.</span>
+      </div>
+
+      <div class="form-group">
+        <label for="input-system" class="control-label">Input system:</label>
+          <select class="form-control" name='input-system' id='input-system'>
+            <option value='icrs2000' selected='selected'>Equatorial (ICRS, J2000)</option>
+            <option value='icrs1950'>Equatorial (ICRS, B1950)</option>
+            <option value='gal'>Galactic</option>
+          </select>
+      </div>
+
+      <div class="form-group">
+        <label for="output-system" class="control-label">Output system:</label>
+          <select class="form-control" name='output-system' id='output-system'>
+            <option value='icrs2000' selected='selected'>Equatorial (ICRS, J2000)</option>
+            <option value='icrs1950'>Equatorial (ICRS, B1950)</option>
+            <option value='gal'>Galactic</option>
+          </select>
+      </div>
+
+      <div class="form-group">
+        <label for="output-format" class="control-label">Output format:</label>
+          <select class="form-control" name='output-format' id='output-format'>
+            <option value='deg' selected='selected'>ddd.ddd dd.ddd</option>
+            <option value='sex'>hh:mm:ss ±dd:mm:ss</option>
+          </select>
+      </div>
+
+      <div class="form-group">
+        <button type="submit" class="btn btn-primary">Convert</button>
+      </div>
+
+      </form>
+
+    </div>
+
+    </form>
+
+  </div>
+
+</div>
+
+</body>
+</html>
