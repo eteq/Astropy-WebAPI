@@ -116,6 +116,9 @@ def convert():
             args['from'] = 'galactic'
 
     derp = _parse_args(args)
+    for fattr_nm, fattr_val in c.get_frame_attr_names().items():
+        derp['frame_' + fattr_nm] = str(fattr_val)
+
     return jsonify(derp)
 
 # @app.errorhandler(404)
