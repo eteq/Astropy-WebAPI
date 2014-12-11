@@ -85,12 +85,12 @@ def _parse_args(args):
     return output
 
 @app.route('/coordinates/', methods=['GET','POST'])
-def index():
+def coordinates_index():
     frame_names = frame_transform_graph.get_names()
     return render_template('coordinates-index.html', frame_names=frame_names)
 
 @app.route('/coordinates/convert', methods=['GET', 'POST'])
-def convert():
+def coordinates_convert():
     if request.method == 'GET':
         args = dict(request.args)
         for k, v in args.items():

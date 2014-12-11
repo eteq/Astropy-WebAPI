@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="description" content="Astropy. A Community Python Library for Astronomy." />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:200,300,400italic,400,700' rel='stylesheet' type='text/css' />
+
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/static/css/style.css" />
+
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/jquery.textarea_autosize.js"></script>
+
+    <title>Astropy Coordinate Conversion</title>
+
+</head>
+
+<body>
+  <nav class="astropy">
+    <a href="http://www.astropy.org"><img src="/static/images/astropy_word_32.png"/></a>
+    <div id="navigation">
+      <ul>
+        <li style="margin-top: 7px"><a href="http://coordinates.astropy.org">Coordinate conversion with Llavascript</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <section>
+
+    <form id='convert-form' action="" method="post">
+      <div class='row'>
+        <div class='col-md-3'></div>
+        <div class='col-md-2' style='text-align: right;'>
+          <select name='from'>
+            {% for name in frame_names %}
+              <option value="{{name}}">{{name}}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class='col-md-2 center-text arrow'>
+          &rightarrow;
+        </div>
+        <div class='col-md-2' style='text-align: left;'>
+          <select name='to'>
+            {% for name in frame_names %}
+              <option value="{{name}}">{{name}}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class='col-md-3'></div>
+      </div>
+
+      <div class='row'>
+        <div id='from' class='col-md-1'></div>
+        <div id='from' class='col-md-5 center-text'>
+
+          <div class="form">
+            <textarea class="coord-box form-control inputoutput js-auto-size" rows="1" data-min-rows="1" id="input-coordinates" name="input-coordinates" placeholder="13.451 8.675309"></textarea>
+            <div class="form-group center-text">
+              <button type="submit" class="btn btn-primary" id='convert-submit'>Convert</button>
+            </div>
+          </div>
+
+        </div>
+
+        <div id='to' class='col-md-5 center-text'>
+          <div class="inputoutput output" id="output"></div>
+        </div>
+
+        <div id='from' class='col-md-1'></div>
+      </div>
+    </form>
+
+  </section>
+
+  <script type='text/javascript'>
+    $(document).ready(function(){
+      $('textarea.js-auto-size').textareaAutoSize();
+
+      $("#convert-form").on("submit", function (e) {
+        e.preventDefault();
+        $("#output").html('');
+
+        data = {};
+        $.ajax({
+          type: "POST",
+          dataType: 'json',
+          url: "/api/convert",
+          data: $("#convert-form").serialize(),
+          success: function(d) {
+            for (var i=0; i < d['coord1'].length; i++) {
+              $("#output").append("<p>" + d['coord1'][i] + " " + d['coord2'][i] + "</p>");
+            }
+          }
+        });
+
+      });
+    });
+  </script>
+
+</body>
+</html>
