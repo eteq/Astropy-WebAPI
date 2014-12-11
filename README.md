@@ -1,4 +1,4 @@
-Coordinates-Frontend
-====================
+Astropy Web API
+===============
 
-A web front-end and API for Astropy Coordinates.
+A web front-end and API for Astropy.
