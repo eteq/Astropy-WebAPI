@@ -6,8 +6,10 @@ from __future__ import division, print_function
 
 __author__ = "adrn <adrn@astro.columbia.edu>"
 
-# Third-party
+# Standard library
 import sqlite3
+
+# Third-party
 from astropy import log as logger
 
 # Project
