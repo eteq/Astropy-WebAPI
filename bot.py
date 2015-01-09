@@ -1,17 +1,12 @@
 # coding: utf-8
 
-""" ...explain... """
+""" AstropyBot """
 
 from __future__ import division, print_function
 
 __author__ = "adrn <adrn@astro.columbia.edu>"
 
-# Standard library
-import os
-import sys
-
 # Third-party
-import numpy as np
 import sqlite3
 from astropy import log as logger
 
@@ -31,11 +26,6 @@ c.execute("""
         reply_sent integer
     )
 """)
-
-# c.execute("create index on tweets "
-#           "(syllable_count)")
-# c.execute("create index on tweets "
-#           "(syllable_count, final_sound, final_word, random)")
 
 for tweet in tweet_stream():
     tweet = tweet[0]
