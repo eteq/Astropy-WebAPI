@@ -6,19 +6,11 @@ from __future__ import division, print_function
 
 __author__ = "adrn <adrn@astro.columbia.edu>"
 
-# Standard library
-import os, sys
-
 # Third-party
 import inflect
-import nltk
 from nltk.tokenize import word_tokenize
-import numpy as np
 from astropy import log as logger
 import astropy.units as u
-
-# Project
-# ...
 
 __all__ = ['parse_unit', 'convert_unit_tweet']
 
@@ -99,7 +91,7 @@ def convert_unit_tweet(tweet_text):
     try:
         units,quantities = parse_unit(tweet_text)
     except ValueError:
-        # TODO:
+        # TODO: wat do?
         return
 
     if len(quantities) > 1 or len(units) > 1:
