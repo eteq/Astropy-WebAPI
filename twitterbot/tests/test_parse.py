@@ -35,11 +35,11 @@ def test_parse_unit():
 
 def test_convert_unit_tweet():
     for i,tweet in enumerate(convert_tweets):
-        resp = convert_unit_tweet(tweet)
+        resp = convert_unit_tweet(tweet, username="derp")
         q = expected_convert[i][1].to(expected_convert[i][0])
-        expected_resp = "{} {}".format(q.value, q.unit)
+        expected_resp = "@derp {} {}".format(q.value, q.unit)
         assert resp == expected_resp
 
 def test_alternate_units():
     for i,tweet in enumerate(unitful_tweets):
-        print(alternate_units(tweet))
+        print(alternate_units(tweet, username="derp"))

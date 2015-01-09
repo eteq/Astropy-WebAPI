@@ -75,7 +75,7 @@ def parse_unit(tweet_text):
 
     return units, quantities
 
-def convert_unit_tweet(tweet_text):
+def convert_unit_tweet(tweet_text, username):
     """ Given a convert command as a whitespace delimited string,
         return a string representing the returned object. For example,
         "convert 15 lightyears to parsecs" will return the string
@@ -85,6 +85,8 @@ def convert_unit_tweet(tweet_text):
         ----------
         tweet_text : str
             A block of whitespace delimited text, e.g., a tweet.
+        username : str
+            The username of the person to respond to.
 
         Returns
         -------
@@ -96,7 +98,7 @@ def convert_unit_tweet(tweet_text):
         units,quantities = parse_unit(tweet_text)
     except ValueError:
         # TODO: wat do?
-        return
+        return None
 
     if len(quantities) > 1 or len(units) > 1:
         # TODO: warning?
@@ -104,9 +106,9 @@ def convert_unit_tweet(tweet_text):
 
     q = quantities[0].to(units[0])
 
-    return "{} {}".format(q.value, q.unit)
+    return "@{0} {1} {2}".format(username, q.value, q.unit)
 
-def alternate_units(tweet_text):
+def alternate_units(tweet_text, username):
     """ Given a tweet as a single string object, find a quantity in the
         text and return a string containing alternate units for the
         quantity.
@@ -115,6 +117,8 @@ def alternate_units(tweet_text):
         ----------
         tweet_text : str
             A block of whitespace delimited text, e.g., a tweet.
+        username : str
+            The username of the person to respond to.
 
         Returns
         -------
@@ -158,9 +162,9 @@ def alternate_units(tweet_text):
         alternates.append(s)
 
     i = 1
-    s = "That's also {}".format(", ".join(alternates))
+    s = "@{0} That's also {1}".format(username, ", ".join(alternates))
     while len(s) > 140:
-        s = "That's also {}".format(", ".join(alternates[:-i]))
+        s = "@{0} That's also {1}".format(username, ", ".join(alternates[:-i]))
         i += 1
 
     return s
