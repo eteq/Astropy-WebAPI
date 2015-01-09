@@ -6,11 +6,15 @@ from __future__ import division, print_function
 
 __author__ = "adrn <adrn@astro.columbia.edu>"
 
+# Standard library
+import random
+
 # Third-party
-import inflect
-from nltk.tokenize import word_tokenize
 from astropy import log as logger
 import astropy.units as u
+import inflect
+from nltk.tokenize import word_tokenize
+import numpy as np
 
 __all__ = ['parse_unit', 'convert_unit_tweet']
 
@@ -101,3 +105,62 @@ def convert_unit_tweet(tweet_text):
     q = quantities[0].to(units[0])
 
     return "{} {}".format(q.value, q.unit)
+
+def alternate_units(tweet_text):
+    """ Given a tweet as a single string object, find a quantity in the
+        text and return a string containing alternate units for the
+        quantity.
+
+        Parameters
+        ----------
+        tweet_text : str
+            A block of whitespace delimited text, e.g., a tweet.
+
+        Returns
+        -------
+        response : str
+            A string response containing the input quantity in alternate
+            units.
+
+    """
+
+    # TODO: I need to define lists of preferred conversions for astronomical
+    #       units for all physical types
+
+    us,qs = parse_unit(tweet_text)
+
+    # short circuit if the text has no quantities inside
+    if len(qs) == 0:
+        return None
+
+    q = qs[0]
+    eq_units = list(q.unit.find_equivalent_units())
+    eq_units += list(q.unit.find_equivalent_units(units=u.imperial))
+    random.shuffle(eq_units)
+
+    alternates = list()
+    for unit in eq_units[:3]:
+        new_q = q.to(unit)
+
+        # fancy stuff to get long name of units
+        long_name_lens = [len(ln) for ln in new_q.unit.long_names]
+        if len(long_name_lens) > 0:
+            ix = np.argmax(long_name_lens)
+            unit_name = new_q.unit.long_names[ix]
+        else:
+            unit_name = str(new_q.unit)
+
+        # pluralize word
+        if new_q.value != 1.:
+            unit_name = p.plural_noun(unit_name)
+
+        s = "{} {}".format(new_q.value, unit_name)
+        alternates.append(s)
+
+    i = 1
+    s = "That's also {}".format(", ".join(alternates))
+    while len(s) > 140:
+        s = "That's also {}".format(", ".join(alternates[:-i]))
+        i += 1
+
+    return s
