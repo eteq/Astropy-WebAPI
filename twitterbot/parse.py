@@ -146,6 +146,9 @@ def alternate_units(tweet_text, username):
     for unit in eq_units[:3]:
         new_q = q.to(unit)
 
+        if unit == q.unit:
+            continue
+
         # fancy stuff to get long name of units
         long_name_lens = [len(ln) for ln in new_q.unit.long_names]
         if len(long_name_lens) > 0:
