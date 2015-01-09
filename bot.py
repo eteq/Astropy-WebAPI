@@ -17,7 +17,7 @@ from astropy import log as logger
 
 # Project
 from twitterbot.twitter import tweet_stream, tweet_reply
-from twitterbot.parse import convert_unit_tweet
+from twitterbot.parse import convert_unit_tweet, alternate_units
 
 conn = sqlite3.connect('tweets.db')
 c = conn.cursor()
@@ -49,8 +49,19 @@ for tweet in tweet_stream():
         logger.info("Reply already sent.")
         continue
 
-    response = convert_unit_tweet(tweet_text)
-    code = tweet_reply("@{0} {1}".format(uname,response), tweet_id, uname)
+    # get responses
+    conv_response = convert_unit_tweet(tweet_text, username=uname)
+    alt_response = alternate_units(tweet_text, username=uname)
+    if conv_response is not None:
+        response = conv_response
+
+    elif alt_response is not None:
+        response = alt_response
+
+    if response is not None:
+        code = tweet_reply(response, tweet_id, uname)
+    else:
+        continue
 
     if code == 200:
         sent = 1
