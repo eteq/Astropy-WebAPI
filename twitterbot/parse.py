@@ -80,6 +80,21 @@ def parse_unit(tweet_text):
     return units, quantities
 
 def convert_unit_tweet(tweet_text):
+    """ Given a convert command as a whitespace delimited string,
+        return a string representing the returned object. For example,
+        "convert 15 lightyears to parsecs" will return the string
+        "4.59902090682 pc".
+
+        Parameters
+        ----------
+        tweet_text : str
+            A block of whitespace delimited text, e.g., a tweet.
+
+        Returns
+        -------
+        response : str
+            A string response to the convert request.
+    """
 
     try:
         units,quantities = parse_unit(tweet_text)
