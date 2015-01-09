@@ -61,6 +61,10 @@ for tweet in tweet_stream():
     if response is not None:
         code = tweet_reply(response, tweet_id, uname)
     else:
+        # tweet isn't relevant
+        c.execute("""insert into tweets(tweet_id, username, body, reply_sent)
+                      values (?, ?, ?, ?)
+                  """, (tweet_id, uname, tweet_text, 1))
         continue
 
     if code == 200:
