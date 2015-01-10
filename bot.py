@@ -42,7 +42,11 @@ for tweet in tweet_stream():
         continue
 
     # get responses
-    conv_response = convert_unit_tweet(tweet_text, username=uname)
+    try:
+        conv_response = convert_unit_tweet(tweet_text, username=uname)
+    except IndexError:
+        conv_response = None
+
     alt_response = alternate_units(tweet_text, username=uname)
     if conv_response is not None:
         response = conv_response
